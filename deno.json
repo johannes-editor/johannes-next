@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "esnext"],
+    "strict": true
+  },
+  "tasks": {
+    "dev": "deno run -A npm:vite demo",
+    "build": "deno run -A npm:vite build",
+    "test": "deno test -A"
+  }
+}
