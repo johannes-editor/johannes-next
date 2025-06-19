@@ -14,9 +14,9 @@
   </style>
 </head>
 <body>
-  <div id="editor" class="editor" contenteditable="true"></div>
+  <div id="editor" lang="en" class="editor" contenteditable="true"></div>
   <script type="module">
-    import { initEditor } from '../src/loader.ts';
+    import { initEditor } from '../src/editor.tsx';
     const root = document.getElementById('editor');
     initEditor(root);
   </script>
