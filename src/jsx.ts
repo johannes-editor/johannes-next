@@ -1,5 +1,13 @@
+import { Component } from './component.ts';
+
 export function h(tag: any, props: Record<string, any> | null, ...children: any[]) {
   if (typeof tag === 'function') {
+    if (tag.prototype instanceof Component) {
+      const instance = new tag({ ...(props || {}), children });
+      const el = instance.mount();
+      (el as any).__componentInstance = instance;
+      return el;
+    }
     return tag({ ...(props || {}), children });
   }
 
