@@ -1,4 +1,4 @@
-export interface Translation {
+export interface TranslationSchema {
   untitled: string;
   startTyping: string;
 }

@@ -1,6 +1,7 @@
-import { Translation } from './translation.ts';
+import { TranslationSchema } from "../types.ts";
 
-const pt: Translation = {
+
+const pt: TranslationSchema = {
   untitled: 'Sem t\u00edtulo',
   startTyping: 'Comece a digitar...',
 };
