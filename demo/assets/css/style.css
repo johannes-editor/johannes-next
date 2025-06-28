@@ -1,0 +1,23 @@
+#content {
+    outline: none;
+}
+
+*:empty:not(:focus)::before {
+    content: attr(data-placeholder);
+}
+
+::part(menu) {
+    display: block;
+    width: 350px;
+    background-color: antiquewhite;
+    padding: 10px;
+}
+
+::part(item) {
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+::part(button) {
+    width: 100%;
+}

@@ -1,26 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Johannes Editor</title>
-  <style>
-    #editor:focus{
-      outline: none;
-    }
-    *:empty:not(:focus)::before {
-      content: attr(data-placeholder);
-    }
-
-  </style>
 
   <link rel="icon" href="assets/img/kepler.ico" type="image/x-icon">
+  <link rel="stylesheet" href="assets/css/style.css" type="text/css">
+
 </head>
+
 <body>
-  <div id="editor" lang="en" class="editor" contenteditable="true"></div>
+  <div id="editor" lang="en"></div>
   <script type="module">
     import { initEditor } from '../src/editor.tsx';
     const root = document.getElementById('editor');
     initEditor(root);
   </script>
 </body>
+
 </html>
