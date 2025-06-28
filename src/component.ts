@@ -1,25 +1,52 @@
-export interface ComponentProps {
-    // deno-lint-ignore no-explicit-any
-    children?: any[];
-    // deno-lint-ignore no-explicit-any
-    [key: string]: any;
+interface ComponentConstructor {
+    styles?: string;
+    tagName?: string;
 }
 
-export interface T extends Component {
+// deno-lint-ignore no-explicit-any
+export abstract class Component<P = any, S = any> extends HTMLElement {
 
-}
+    props: P = {} as P;
+    state: S = {} as S;
+    element!: HTMLElement;
+    shadow = this.attachShadow({ mode: 'open' });
 
-export abstract class Component<P = any, S = any> {
-    props: P;
-    state?: S;
-    el!: HTMLElement;
-    onMount?(): void;
-    onUnmount?(): void;
+    private listeners: Array<[EventTarget, string, EventListenerOrEventListenerObject, boolean?]> = [];
 
-    private _listeners: Array<[EventTarget, string, EventListenerOrEventListenerObject, boolean?]> = [];
+    constructor() {
+        super();
+        const proto = Object.getPrototypeOf(this);
 
-    constructor(props: P) {
-        this.props = props;
+        if (proto.connectedCallback !== Component.prototype.connectedCallback) {
+            console.warn(
+                `${this.constructor.name} overrides 'connectedCallback'. Prefer using 'onMount()' instead.`
+            );
+        }
+
+        if (proto.disconnectedCallback !== Component.prototype.disconnectedCallback) {
+            console.warn(
+                `${this.constructor.name} overrides 'disconnectedCallback'. Prefer using 'onUnmount()' instead.`
+            );
+        }
+    }
+
+    connectedCallback() {
+        this.renderDOM();
+        this.onMount?.();
+    }
+
+    disconnectedCallback() {
+        this.onUnmount?.();
+        for (const [target, type, listener, options] of this.listeners) {
+            target.removeEventListener(type, listener, options);
+        }
+        this.listeners = [];
+    }
+
+    public setState(partial: Partial<S>) {
+        const nextState = { ...this.state, ...partial };
+        this.state = nextState;
+        this.renderDOM();
     }
 
     protected on(
@@ -29,74 +56,35 @@ export abstract class Component<P = any, S = any> {
         options?: boolean
     ) {
         target.addEventListener(type, listener, options);
-        this._listeners.push([target, type, listener, options]);
+        this.listeners.push([target, type, listener, options]);
+    }
+
+    protected injectStyles() {
+
+        if (Object.prototype.hasOwnProperty.call(this, "styles")) {
+            console.warn(
+                `${this.constructor.name} has 'styles' as an instance property, which will be ignored. ` +
+                "Define 'static styles' to apply styles to your component."
+            );
+        }
+
+        const ctor = this.constructor as ComponentConstructor;
+        const styles = ctor.styles;
+        if (styles && typeof styles === "string") {
+            const styleEl = document.createElement("style");
+            styleEl.textContent = styles;
+            this.shadow.appendChild(styleEl);
+        }
+    }
+
+    private renderDOM() {
+        this.shadow.innerHTML = "";
+        this.injectStyles();
+        this.shadow.appendChild(this.render());
     }
 
     abstract render(): HTMLElement;
 
-    setState(partialState: Partial<S>) {
-        this.state = { ...this.state, ...partialState } as S;
-        this.rerender();
-    }
-
-    rerender() {
-        if (!this.el) return;
-
-        for (const child of Array.from(this.el.childNodes)) {
-            const comp = (child as any).__componentInstance;
-            if (comp) comp.unmount();
-        }
-
-        this.removeAllListeners();
-
-        const newEl = this.render();
-        this.el.replaceWith(newEl);
-        this.el = newEl;
-        if (typeof this.onMount === 'function') {
-            this.onMount();
-        }
-    }
-
-
-    mount(): HTMLElement {
-        const element = this.render();
-        this.el = element;
-        if (typeof this.onMount === 'function') {
-            this.onMount();
-        }
-        return element;
-    }
-
-    unmount(): void {
-        if (typeof this.onUnmount === 'function') {
-            this.onUnmount();
-        }
-
-        this.removeAllListeners();
-
-        if (this.el) {
-            this.unmountAllComponents(this.el);
-            if (this.el.parentNode) {
-                this.el.parentNode.removeChild(this.el);
-            }
-        }
-    }
-
-
-    private removeAllListeners() {
-        this._listeners.forEach(([target, type, listener, options]) => {
-            target.removeEventListener(type, listener, options);
-        });
-        this._listeners = [];
-    }
-
-    private unmountAllComponents(parent: Node) {
-        for (const child of Array.from(parent.childNodes)) {
-            const comp = (child as any).__componentInstance;
-            if (comp && typeof comp.unmount === 'function') {
-                comp.unmount();
-            }
-            this.unmountAllComponents(child);
-        }
-    }
+    onMount?(): void;
+    onUnmount?(): void;
 }
