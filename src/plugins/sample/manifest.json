@@ -1,0 +1,12 @@
+{
+    "name": "Sample",
+    "author": "demo",
+    "version": "1.0.0",
+    "active": true,
+    "slashMenuItems": [
+        {
+            "label": "Quote",
+            "content": "<blockquote>To be or not to be</blockquote>"
+        }
+    ]
+}
