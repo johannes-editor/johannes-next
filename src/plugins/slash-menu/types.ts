@@ -1,4 +1,4 @@
-import { AnyPluginManifest } from "../../../plugins/types.ts";
+import { AnyPluginManifest } from "../../plugins/types.ts";
 
 
 export interface SlashMenuProps {
