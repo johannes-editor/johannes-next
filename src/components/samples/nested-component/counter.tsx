@@ -1,6 +1,6 @@
 /** @jsx h */
-import { h } from "../../jsx.ts";
-import { Component } from "../../component.ts";
+import { h } from "../../../jsx.ts";
+import { Component } from "../../../component.ts";
 
 export interface CounterProps {
     count: number;

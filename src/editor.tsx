@@ -1,10 +1,10 @@
 /** @jsx h */
 import { Fragment, h } from "./jsx.ts";
 import { setLocale, t } from "./i18n/index.ts";
-import { CounterToggle } from "./components/samples/counter-toggle.tsx";
+import { CounterToggle } from "./components/samples/nested-component/counter-toggle.tsx";
 import { SlashMenu } from "./components/samples/slash-menu/slash-menu.tsx";
 import { loadActivePlugins } from "./plugins/loader.ts";
-import { SimpleButton } from "./components/samples/simple-button.tsx";
+import { SimpleButton } from "./components/samples/simple-button/simple-button.tsx";
 import { FetchButton } from "./components/samples/fetch-component/fetch-component.tsx";
 
 export { setLocale };
