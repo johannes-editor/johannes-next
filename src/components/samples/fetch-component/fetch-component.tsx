@@ -9,7 +9,7 @@ interface FetchComponentState {
 }
 
 export class FetchButton extends Component<EmptyProps, FetchComponentState> {
-    
+
     fetchData = async () => {
 
         this.setState({ loading: true });
@@ -32,11 +32,11 @@ export class FetchButton extends Component<EmptyProps, FetchComponentState> {
 
     render() {
         return (
-            <Fragment>
+            <div>
                 <button type="button" onClick={this.fetchData}>Button</button>
                 {this.state.loading && <p>loading...</p>}
                 {this.state.data && <pre>{JSON.stringify(this.state.data, null, 2)}</pre>}
-            </Fragment>
+            </div>
         );
     }
 }

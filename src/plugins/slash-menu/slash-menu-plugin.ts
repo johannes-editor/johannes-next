@@ -1,4 +1,4 @@
-import { EditorPlugin } from "./editor-plugin.ts";
+import { EditorPlugin } from "../editor-plugin.ts";
 
 
 export interface SlashMenuContext {
