@@ -1,6 +1,6 @@
 /** @jsx h */
 import { Fragment, h } from "../../../jsx.ts";
-import { Component } from "../../../component.ts";
+import { Component } from "../../component.ts";
 import { Counter } from "./counter.tsx";
 import { EmptyProps } from "../../types.ts";
 

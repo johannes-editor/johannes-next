@@ -1,4 +1,4 @@
-import { Component } from "./component.ts";
+import { Component } from "./components/component.ts";
 
 export function h(tag: any, props: Record<string, any> | null, ...children: any[]) {
     if (typeof tag === 'function') {

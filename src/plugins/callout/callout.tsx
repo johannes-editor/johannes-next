@@ -1,6 +1,6 @@
 /** @jsx h */
 import { h } from '../../jsx.ts';
-import { Component } from '../../component.ts';
+import { Component } from '../../components/component.ts';
 
 export interface CalloutProps {
     content: string;
