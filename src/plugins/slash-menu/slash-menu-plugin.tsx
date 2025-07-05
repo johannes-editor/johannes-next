@@ -3,10 +3,6 @@ import { h } from "../../jsx.ts";
 import { EditorPlugin } from "../editor-plugin.ts";
 import { SlashMenu } from "./components/slash-menu.tsx";
 
-export interface SlashMenuContext {
-    node: Node;
-    range: Range;
-}
 
 export class SlashMenuPlugin extends EditorPlugin {
 
@@ -19,18 +15,12 @@ export class SlashMenuPlugin extends EditorPlugin {
         );
         console.log(plugins);
     }
-
-
-
-
 }
 
 export interface SlashMenuExtensionEditorPlugin {
     label: string;
-    onSelect(baseContent: string): void;
+    onSelect(): void;
 }
-
-
 
 function isSlashMenuExtensionPlugin(
     plugin: EditorPlugin

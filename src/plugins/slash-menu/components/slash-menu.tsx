@@ -1,5 +1,5 @@
 /** @jsx h */
-import { h } from "../../../jsx.ts";
+import { Fragment, h } from "../../../jsx.ts";
 import { Component } from "../../../components/component.ts";
 import { SlashMenuItem } from "./slash-menu-item.tsx";
 import { SlashMenuExtensionEditorPlugin } from "../slash-menu-plugin.tsx";
@@ -11,11 +11,12 @@ interface SlashMenuProps {
 
 interface SlashMenuState {
     items: SlashMenuItemData[];
+    showSlashMenu: boolean;
 }
 
 export interface SlashMenuItemData {
     label: string;
-    onSelect: (baseContent: string) => void;
+    onSelect: () => void;
 }
 
 export class SlashMenu extends Component<SlashMenuProps, SlashMenuState> {
@@ -27,17 +28,18 @@ export class SlashMenu extends Component<SlashMenuProps, SlashMenuState> {
             items: [
                 {
                     label: "H1",
-                    onSelect: (baseContent: string) => {
+                    onSelect: () => {
                         this.insert("<h1>H1</h1>");
                     }
                 },
                 {
                     label: "Paragraph",
-                    onSelect: (baseContent: string) => {
+                    onSelect: () => {
                         this.insert("<p>P</p>");
                     }
                 }
-            ]
+            ],
+            showSlashMenu: false
         };
     }
 
@@ -47,12 +49,24 @@ export class SlashMenu extends Component<SlashMenuProps, SlashMenuState> {
         for (const plugin of this.props.extensionPlugins) {
             newItems.push({
                 label: plugin.label,
-                onSelect: (baseContent: string) => plugin.onSelect(baseContent)
+                onSelect: () => plugin.onSelect()
             });
         }
 
         this.setState({ items: newItems });
+
+        this.on(document, "keydown", this.handleKey as EventListener);
     }
+
+    private readonly handleKey = (e: KeyboardEvent) => {
+        if (e.key === "/" && !this.state.showSlashMenu) {
+            this.setState({ showSlashMenu: true });
+        }
+
+        if (e.key === "Escape" && this.state.showSlashMenu) {
+            this.setState({ showSlashMenu: false });
+        }
+    };
 
     insert(content: string) {
         const contentNode = document.getElementById("content")!;
@@ -61,16 +75,19 @@ export class SlashMenu extends Component<SlashMenuProps, SlashMenuState> {
 
     render() {
         return (
-            <ul part="menu" class="slash-menu">
-                {this.state.items.map((item) => (
-                    <li part="item">
-                        <SlashMenuItem
-                            label={item.label}
-                            onSelect={() => item.onSelect("")}
-                        />
-                    </li>
-                ))}
-            </ul>
+            <Fragment>
+                {this.state.showSlashMenu &&
+                    <ul part="menu" class="slash-menu">
+                        {this.state.items.map((item) => (
+                            <li part="item">
+                                <SlashMenuItem
+                                    label={item.label}
+                                    onSelect={() => item.onSelect()}
+                                />
+                            </li>
+                        ))}
+                    </ul>}
+            </Fragment>
         );
     }
 }
