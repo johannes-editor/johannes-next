@@ -9,10 +9,34 @@ export interface SlashMenuContext {
 }
 
 export class SlashMenuPlugin extends EditorPlugin {
-    
-    override setup(root: HTMLElement): void {
-      root.append(<SlashMenu />);
+
+    override setup(root: HTMLElement, plugins: EditorPlugin[]): void {
+
+        const extensionPlugins = plugins.filter(isSlashMenuExtensionPlugin);
+
+        root.append(
+            <SlashMenu extensionPlugins={extensionPlugins} />
+        );
+        console.log(plugins);
     }
 
-    // abstract onSelect(context: SlashMenuContext): void;
+
+
+
+}
+
+export interface SlashMenuExtensionEditorPlugin {
+    label: string;
+    onSelect(baseContent: string): void;
+}
+
+
+
+function isSlashMenuExtensionPlugin(
+    plugin: EditorPlugin
+): plugin is EditorPlugin & SlashMenuExtensionEditorPlugin {
+    return (
+        typeof (plugin as any).label === "string" &&
+        typeof (plugin as any).onSelect === "function"
+    );
 }

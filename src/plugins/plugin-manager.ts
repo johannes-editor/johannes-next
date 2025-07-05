@@ -6,7 +6,7 @@ export async function appendPlugins(root: HTMLElement) {
   const plugins = await fetchPlugins();
   for (const plugin of plugins) {
     try {
-      plugin.setup(root);
+      plugin.setup(root, plugins);
     } catch (err) {
       console.error(
         `Failed to setup plugin "${plugin.constructor.name}": ${err instanceof Error ? err.message : err}`,

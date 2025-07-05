@@ -1,23 +1,20 @@
 import { EditorPlugin } from "../editor-plugin.ts";
-import { SlashMenuContext } from "../slash-menu/slash-menu-plugin.tsx";
+import { SlashMenuExtensionEditorPlugin } from "../slash-menu/slash-menu-plugin.tsx";
 
-export class EmojiPlugin extends EditorPlugin {
+export class EmojiPlugin extends EditorPlugin implements SlashMenuExtensionEditorPlugin {
+    
+    label: string = "Emoji";
+
+    insert(content: string) {
+        const contentNode = document.getElementById("content")!;
+        contentNode.insertAdjacentHTML("beforeend", content);
+    }
+    
+    onSelect(baseContent: string): void {
+      this.insert('😎');
+    }
     
     override setup(root: HTMLElement): void {
-        console.log("initialized!");
-    }
-
-    onSelect(context: SlashMenuContext) {
-        const emojiNode = document.createTextNode('😎');
-        context.range.insertNode(emojiNode);
-
-        context.range.setStartAfter(emojiNode);
-        context.range.collapse(true);
-
-        const selection = window.getSelection();
-        if (selection) {
-            selection.removeAllRanges();
-            selection.addRange(context.range);
-        }
+        console.log("initialized!!!!!!!");
     }
 }

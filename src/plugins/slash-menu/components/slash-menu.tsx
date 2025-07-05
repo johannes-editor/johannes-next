@@ -2,10 +2,11 @@
 import { h } from "../../../jsx.ts";
 import { Component } from "../../../components/component.ts";
 import { SlashMenuItem } from "./slash-menu-item.tsx";
+import { SlashMenuExtensionEditorPlugin } from "../slash-menu-plugin.tsx";
 
 
 interface SlashMenuProps {
-    extensionPlugins: any[];
+    extensionPlugins: SlashMenuExtensionEditorPlugin[];
 }
 
 interface SlashMenuState {
@@ -14,7 +15,7 @@ interface SlashMenuState {
 
 export interface SlashMenuItemData {
     label: string;
-    content: string;
+    onSelect: (baseContent: string) => void;
 }
 
 export class SlashMenu extends Component<SlashMenuProps, SlashMenuState> {
@@ -24,21 +25,31 @@ export class SlashMenu extends Component<SlashMenuProps, SlashMenuState> {
 
         this.state = {
             items: [
-                { label: "H1", content: "<h1>H1</h1>" },
-                { label: "Paragraph", content: "<p>P</p>" },
-            ],
+                {
+                    label: "H1",
+                    onSelect: (baseContent: string) => {
+                        this.insert("<h1>H1</h1>");
+                    }
+                },
+                {
+                    label: "Paragraph",
+                    onSelect: (baseContent: string) => {
+                        this.insert("<p>P</p>");
+                    }
+                }
+            ]
         };
     }
 
     override onMount(): void {
-
         const newItems = [...this.state.items];
 
-        // for (const extensions of this.props.extensionPlugins) {
-        //     if ("slashMenuItems" in extensions) {
-        //         newItems.push(...extensions.slashMenuItems);
-        //     }
-        // }
+        for (const plugin of this.props.extensionPlugins) {
+            newItems.push({
+                label: plugin.label,
+                onSelect: (baseContent: string) => plugin.onSelect(baseContent)
+            });
+        }
 
         this.setState({ items: newItems });
     }
@@ -55,7 +66,7 @@ export class SlashMenu extends Component<SlashMenuProps, SlashMenuState> {
                     <li part="item">
                         <SlashMenuItem
                             label={item.label}
-                            onSelect={() => this.insert(item.content)}
+                            onSelect={() => item.onSelect("")}
                         />
                     </li>
                 ))}
