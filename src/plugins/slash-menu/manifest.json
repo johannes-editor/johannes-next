@@ -1,0 +1,6 @@
+{
+    "name": "Slash Menu",
+    "active": true,
+    "class": "SlashMenuPlugin",
+    "path": "./slash-menu-plugin.tsx"
+}

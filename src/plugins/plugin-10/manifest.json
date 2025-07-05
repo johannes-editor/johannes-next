@@ -1,0 +1,6 @@
+{
+    "name": "Plugin 10",
+    "active": true,
+    "class": "Plugin10",
+    "path": "./plugin-10.tsx"
+}

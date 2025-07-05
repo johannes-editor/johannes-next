@@ -2,11 +2,14 @@
     "name": "Emoji",
     "author": "demo",
     "version": "1.0.0",
-    "active": true,
+    
     "slashMenuItems": [
         {
             "label": "Callout",
             "content": "<div class='callout'></div>"
         }
-    ]
+    ],
+    "path": "./emoji.ts",
+    "class": "EmojiPlugin",
+    "active": true
 }

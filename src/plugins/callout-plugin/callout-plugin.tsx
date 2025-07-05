@@ -1,11 +1,10 @@
 /** @jsx h */
-import { h } from "../../jsx.ts";
+import { h } from '../../jsx.ts';
 import { EditorPlugin } from "../editor-plugin.ts";
-import { ModalButtonUI } from "./components/modal-button-ui.tsx";
 
-export class ModalButtonPlugin extends EditorPlugin{
+export class CalloutPlugin extends EditorPlugin {
+    
     override setup(root: HTMLElement): void {
       throw new Error("Method not implemented.");
-
     }
 }

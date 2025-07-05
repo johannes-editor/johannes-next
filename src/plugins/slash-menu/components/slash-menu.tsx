@@ -1,8 +1,21 @@
 /** @jsx h */
-import { h } from "../../jsx.ts";
-import { Component } from "../../components/component.ts";
+import { h } from "../../../jsx.ts";
+import { Component } from "../../../components/component.ts";
 import { SlashMenuItem } from "./slash-menu-item.tsx";
-import { SlashMenuProps, SlashMenuState } from "./types.ts";
+
+
+interface SlashMenuProps {
+    extensionPlugins: any[];
+}
+
+interface SlashMenuState {
+    items: SlashMenuItemData[];
+}
+
+export interface SlashMenuItemData {
+    label: string;
+    content: string;
+}
 
 export class SlashMenu extends Component<SlashMenuProps, SlashMenuState> {
 
@@ -21,11 +34,11 @@ export class SlashMenu extends Component<SlashMenuProps, SlashMenuState> {
 
         const newItems = [...this.state.items];
 
-        for (const plugin of this.props.plugins) {
-            if ("slashMenuItems" in plugin) {
-                newItems.push(...plugin.slashMenuItems);
-            }
-        }
+        // for (const extensions of this.props.extensionPlugins) {
+        //     if ("slashMenuItems" in extensions) {
+        //         newItems.push(...extensions.slashMenuItems);
+        //     }
+        // }
 
         this.setState({ items: newItems });
     }

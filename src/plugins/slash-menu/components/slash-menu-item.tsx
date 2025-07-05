@@ -1,6 +1,6 @@
 /** @jsx h */
-import { h } from "../../jsx.ts";
-import { Component } from "../../components/component.ts";
+import { h } from "../../../jsx.ts";
+import { Component } from "../../../components/component.ts";
 
 export interface SlashMenuItemProps {
     label: string;

@@ -1,34 +1,28 @@
 /** @jsx h */
 import { Fragment, h } from "./jsx.ts";
 import { setLocale, t } from "./i18n/index.ts";
-import { SimpleButton } from "./components/samples/simple-button/simple-button.tsx";
-import { CounterToggle } from "./components/samples/nested-component/counter-toggle.tsx";
-import { SlashMenu } from "./plugins/slash-menu/slash-menu.tsx";
-import { FetchButton } from "./components/samples/fetch-component/fetch-component.tsx";
-import { loadActivePlugins } from "./plugins/index.ts";
-import { ModalButtonPlugin } from "./plugins/modal-button/modal-button-plugin.tsx";
+import { appendPlugins } from "./plugins/plugin-manager.ts"
 
-
-export { setLocale };
-
+/**
+* Initializes the text editor.
+* 
+* @param root The root HTML element where the editor will be mounted.
+*/
 export async function initEditor(root: HTMLElement) {
+    // Set the language for the interface, defaulting to English if not specified.
     const lang = root.getAttribute("lang") || "en";
     await setLocale(lang);
 
-    const plugins = await loadActivePlugins();
-
+    /** Load the basic editor layout */
     root.replaceChildren(
         <Fragment>
             <div id="content" contenteditable="true">
                 <h1 data-placeholder={t("untitled")}></h1>
                 <p data-placeholder={t("startTyping")}></p>
             </div>
-            <SimpleButton />
-            <CounterToggle />
-            {/* <SlashMenu plugins={plugins} /> */}
-            <FetchButton />
-        </Fragment>,
-       new ModalButtonPlugin().render()
-        
+        </Fragment>
     );
+
+    /** Append plugins to the editor */
+    appendPlugins(root);
 }

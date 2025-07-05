@@ -1,5 +1,6 @@
 /** @jsx h */
-import { h } from "../../../jsx.ts";
+import { h } from '../../../jsx.ts';
+
 import { Component } from "../../../components/component.ts";
 import { EmptyProps } from "../../../components/types.ts";
 import { Modal } from "./modal.tsx";

@@ -1,13 +1,10 @@
-import { SlashMenuContext, SlashMenuPlugin } from "../slash-menu/slash-menu-plugin.ts";
+import { EditorPlugin } from "../editor-plugin.ts";
+import { SlashMenuContext } from "../slash-menu/slash-menu-plugin.tsx";
 
-export class EmojiPlugin extends SlashMenuPlugin {
-    override title: string;
-    override description?: string | undefined;
-
-    constructor() {
-        // super("Emoji", "Alexandre", true);
-        super();
-        this.title = "Emoji";
+export class EmojiPlugin extends EditorPlugin {
+    
+    override setup(root: HTMLElement): void {
+        console.log("initialized!");
     }
 
     onSelect(context: SlashMenuContext) {
