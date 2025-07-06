@@ -2,11 +2,11 @@
 import { Fragment, h } from "../../../jsx.ts";
 import { Component } from "../../../components/component.ts";
 import { SlashMenuItem } from "./slash-menu-item.tsx";
-import { SlashMenuExtensionEditorPlugin } from "../slash-menu-plugin.tsx";
+import { SlashMenuPluginExtension } from "../slash-menu-plugin.tsx";
 
 
 interface SlashMenuProps {
-    extensionPlugins: SlashMenuExtensionEditorPlugin[];
+    extensionPlugins: SlashMenuPluginExtension[];
 }
 
 interface SlashMenuState {
