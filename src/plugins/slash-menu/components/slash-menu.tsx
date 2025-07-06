@@ -20,6 +20,8 @@ export interface SlashMenuItemData {
 }
 
 export class SlashMenu extends Component<SlashMenuProps, SlashMenuState> {
+    
+    contentElement: HTMLElement;
 
     constructor() {
         super();
@@ -41,6 +43,8 @@ export class SlashMenu extends Component<SlashMenuProps, SlashMenuState> {
             ],
             showSlashMenu: false
         };
+
+        this.contentElement = document.getElementById("content")!;
     }
 
     override onMount(): void {
@@ -55,7 +59,7 @@ export class SlashMenu extends Component<SlashMenuProps, SlashMenuState> {
 
         this.setState({ items: newItems });
 
-        this.on(document, "keydown", this.handleKey as EventListener);
+        this.on(this.contentElement, "keydown", this.handleKey as EventListener);
     }
 
     private readonly handleKey = (e: KeyboardEvent) => {
