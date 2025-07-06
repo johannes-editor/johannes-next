@@ -10,7 +10,7 @@ export class EmojiPlugin extends EditorPlugin implements SlashMenuExtensionEdito
         contentNode.insertAdjacentHTML("beforeend", content);
     }
     
-    onSelect(baseContent: string): void {
+    onSelect(): void {
       this.insert('😎');
     }
     
