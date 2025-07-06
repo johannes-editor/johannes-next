@@ -1,5 +1,6 @@
 {
     "name": "Slash Menu",
+    "author": "Alexandre Tavares",
     "active": true,
     "class": "SlashMenuPlugin",
     "path": "./slash-menu-plugin.tsx"

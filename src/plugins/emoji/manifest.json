@@ -1,6 +1,6 @@
 {
     "name": "Emoji",
-    "author": "demo",
+    "author": "Alexandre Tavares",
     "version": "1.0.0",
     "path": "./emoji.ts",
     "class": "EmojiPlugin",
