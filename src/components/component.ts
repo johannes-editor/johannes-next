@@ -9,7 +9,6 @@ export abstract class Component<P = any, S = any> extends HTMLElement {
     props: P = {} as P;
     state: S = {} as S;
     element!: HTMLElement;
-    shadow = this.attachShadow({ mode: 'open' });
 
     private listeners: Array<[EventTarget, string, EventListenerOrEventListenerObject, boolean?]> = [];
 
@@ -60,7 +59,6 @@ export abstract class Component<P = any, S = any> extends HTMLElement {
     }
 
     protected injectStyles() {
-
         if (Object.prototype.hasOwnProperty.call(this, "styles")) {
             console.warn(
                 `${this.constructor.name} has 'styles' as an instance property, which will be ignored. ` +
@@ -71,16 +69,20 @@ export abstract class Component<P = any, S = any> extends HTMLElement {
         const ctor = this.constructor as ComponentConstructor;
         const styles = ctor.styles;
         if (styles && typeof styles === "string") {
-            const styleEl = document.createElement("style");
-            styleEl.textContent = styles;
-            this.shadow.appendChild(styleEl);
+            const styleId = `component-style-${this.tagName.toLowerCase()}`;
+            if (!document.getElementById(styleId)) {
+                const styleEl = document.createElement("style");
+                styleEl.id = styleId;
+                styleEl.textContent = styles;
+                document.head.appendChild(styleEl);
+            }
         }
     }
 
     private renderDOM() {
-        this.shadow.innerHTML = "";
+        this.innerHTML = "";
         this.injectStyles();
-        this.shadow.appendChild(this.render());
+        this.appendChild(this.render());
     }
 
     abstract render(): HTMLElement;
