@@ -1,7 +1,7 @@
-import { EditorPlugin } from "../editor-plugin.ts";
+import { Plugin } from "../plugin.ts";
 
-export class SampleButtonPlugin extends EditorPlugin {
-       
-
-
+export class SampleButtonPlugin extends Plugin {
+  override setup(root: HTMLElement, plugins: Plugin[]): void {
+    throw new Error("Method not implemented.");
+  }
 }

@@ -1,4 +1,4 @@
-import { EditorPlugin } from "./editor-plugin.ts";
+import { Plugin } from "./plugin.ts";
 
 const manifestModules = import.meta.glob("./*/manifest.json");
 
@@ -17,8 +17,8 @@ export async function appendPlugins(root: HTMLElement) {
   console.log("Plugins initialized!");
 }
 
-async function fetchPlugins(): Promise<EditorPlugin[]> {
-  const plugins: EditorPlugin[] = [];
+async function fetchPlugins(): Promise<Plugin[]> {
+  const plugins: Plugin[] = [];
 
   for (const manifestPath in manifestModules) {
     try {
@@ -39,14 +39,14 @@ async function fetchPlugins(): Promise<EditorPlugin[]> {
       const baseDir = manifestPath.replace("/manifest.json", "");
       const modulePath = `${baseDir}/${manifest.path.replace("./", "")}`;
       const mod = await import(/* @vite-ignore */ modulePath);
-      const PluginClass = mod[manifest.class] as { new (): EditorPlugin };
+      const PluginClass = mod[manifest.class] as { new (): Plugin };
 
       if (!PluginClass) {
         throw new Error(`Class ${manifest.class} not found in ${modulePath}`);
       }
 
       const instance = new PluginClass();
-      if (instance instanceof EditorPlugin) plugins.push(instance);
+      if (instance instanceof Plugin) plugins.push(instance);
 
     } catch (err) {
       console.warn(`Failed to load plugin at ${manifestPath}: ${err instanceof Error ? err.message : err}`);

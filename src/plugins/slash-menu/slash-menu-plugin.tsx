@@ -1,6 +1,6 @@
 /** @jsx h */
 import { h } from "../../jsx.ts";
-import { EditorPlugin } from "../editor-plugin.ts";
+import { Plugin } from "../plugin.ts";
 import { SlashMenu } from "./components/slash-menu.tsx";
 
 /**
@@ -10,7 +10,7 @@ import { SlashMenu } from "./components/slash-menu.tsx";
  * - Menu items allow users to quickly run actions and commands.
  * - You can extend the SlashMenu by creating plugins that implement the `SlashMenuExtensionEditorPlugin` interface—just provide a `label` and an `onSelect()` function, and your plugin will automatically appear as a menu option.
  */
-export class SlashMenuPlugin extends EditorPlugin {
+export class SlashMenuPlugin extends Plugin {
 
     /**
     * Initializes the plugin by appending a SlashMenu to the editor root,
@@ -19,7 +19,7 @@ export class SlashMenuPlugin extends EditorPlugin {
     * @param root The editor's root HTMLElement.
     * @param plugins The list of all loaded editor plugins.
     */
-    override setup(root: HTMLElement, plugins: EditorPlugin[]): void {
+    override setup(root: HTMLElement, plugins: Plugin[]): void {
 
         const extensionPlugins = plugins.filter(isSlashMenuExtensionPlugin);
 
@@ -45,7 +45,7 @@ export interface SlashMenuExtensionEditorPlugin {
  * @param plugin The plugin to check.
  * @returns True if the plugin implements the required interface.
  */
-function isSlashMenuExtensionPlugin(plugin: EditorPlugin): plugin is EditorPlugin & SlashMenuExtensionEditorPlugin {
+function isSlashMenuExtensionPlugin(plugin: Plugin): plugin is Plugin & SlashMenuExtensionEditorPlugin {
     return (
         "label" in plugin &&
         typeof plugin["label"] === "string" &&

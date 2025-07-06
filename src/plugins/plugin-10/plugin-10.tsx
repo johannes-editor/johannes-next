@@ -1,9 +1,9 @@
 /** @jsx h */
 import { h } from "../../jsx.ts";
-import { EditorPlugin } from "../editor-plugin.ts";
+import { Plugin } from "../plugin.ts";
 import { Button10 } from "./button-10.tsx";
 
-export class Plugin10 extends EditorPlugin {
+export class Plugin10 extends Plugin {
 
     override setup(root: HTMLElement): void {
         

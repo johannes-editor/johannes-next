@@ -1,7 +1,7 @@
-import { EditorPlugin } from "../editor-plugin.ts";
+import { Plugin } from "../plugin.ts";
 import { SlashMenuExtensionEditorPlugin } from "../slash-menu/slash-menu-plugin.tsx";
 
-export class EmojiPlugin extends EditorPlugin implements SlashMenuExtensionEditorPlugin {
+export class EmojiPlugin extends Plugin implements SlashMenuExtensionEditorPlugin {
     
     label: string = "Emoji";
 

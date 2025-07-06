@@ -1,8 +1,8 @@
 /** @jsx h */
 import { h } from '../../jsx.ts';
-import { EditorPlugin } from "../editor-plugin.ts";
+import { Plugin } from "../plugin.ts";
 
-export class CalloutPlugin extends EditorPlugin {
+export class CalloutPlugin extends Plugin {
     
     override setup(root: HTMLElement): void {
       throw new Error("Method not implemented.");
