@@ -15,19 +15,6 @@ export abstract class Component<P = any, S = any> extends HTMLElement {
 
     constructor() {
         super();
-        const proto = Object.getPrototypeOf(this);
-
-        if (proto.connectedCallback !== Component.prototype.connectedCallback) {
-            console.warn(
-                `${this.constructor.name} overrides 'connectedCallback'. Prefer using 'onMount()' instead.`
-            );
-        }
-
-        if (proto.disconnectedCallback !== Component.prototype.disconnectedCallback) {
-            console.warn(
-                `${this.constructor.name} overrides 'disconnectedCallback'. Prefer using 'onUnmount()' instead.`
-            );
-        }
     }
 
     connectedCallback() {
