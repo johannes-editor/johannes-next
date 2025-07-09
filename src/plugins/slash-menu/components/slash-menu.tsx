@@ -1,8 +1,8 @@
 /** @jsx h */
 import { Fragment, h } from "../../../jsx.ts";
-import { Component } from "../../../components/component.ts";
 import { SlashMenuItem } from "./slash-menu-item.tsx";
 import { SlashMenuPluginExtension } from "../slash-menu-plugin.tsx";
+import { Overlay } from "../../../components/base/overlay.ts";
 
 
 interface SlashMenuProps {
@@ -11,7 +11,7 @@ interface SlashMenuProps {
 
 interface SlashMenuState {
     items: SlashMenuItemData[];
-    showSlashMenu: boolean;
+    selectedIndex: number;
 }
 
 export interface SlashMenuItemData {
@@ -19,9 +19,10 @@ export interface SlashMenuItemData {
     onSelect: () => void;
 }
 
-export class SlashMenu extends Component<SlashMenuProps, SlashMenuState> {
-    
+export class SlashMenu extends Overlay<SlashMenuProps, SlashMenuState> {
+
     contentElement: HTMLElement;
+
 
     constructor() {
         super();
@@ -41,7 +42,7 @@ export class SlashMenu extends Component<SlashMenuProps, SlashMenuState> {
                     }
                 }
             ],
-            showSlashMenu: false
+            selectedIndex: 0
         };
 
         this.contentElement = document.getElementById("content")!;
@@ -63,13 +64,37 @@ export class SlashMenu extends Component<SlashMenuProps, SlashMenuState> {
     }
 
     private readonly handleKey = (e: KeyboardEvent) => {
-        if (e.key === "/" && !this.state.showSlashMenu) {
-            this.setState({ showSlashMenu: true });
-        }
 
-        if (e.key === "Escape" && this.state.showSlashMenu) {
-            this.setState({ showSlashMenu: false });
-        }
+
+        // if (!this.state.showSlashMenu) {
+        //     return;
+        // }
+
+        // switch (e.key) {
+        //     // case "Escape":
+        //     //     this.setState({ showSlashMenu: false });
+        //     //     break;
+        //     case "ArrowDown":
+        //         e.preventDefault();
+        //         this.setState({
+        //             selectedIndex: (this.state.selectedIndex + 1) % this.state.items.length,
+        //         });
+        //         break;
+        //     case "ArrowUp":
+        //         e.preventDefault();
+        //         this.setState({
+        //             selectedIndex: (this.state.selectedIndex - 1 + this.state.items.length) % this.state.items.length,
+        //         });
+        //         break;
+        //     case "Enter":
+        //         e.preventDefault();
+        //         const item = this.state.items[this.state.selectedIndex];
+        //         if (item) {
+        //             item.onSelect();
+        //             this.setState({ showSlashMenu: false });
+        //         }
+        //         break;
+        // }
     };
 
     insert(content: string) {
@@ -80,17 +105,17 @@ export class SlashMenu extends Component<SlashMenuProps, SlashMenuState> {
     render() {
         return (
             <Fragment>
-                {this.state.showSlashMenu &&
-                    <ul part="menu" class="slash-menu">
-                        {this.state.items.map((item) => (
-                            <li part="item">
-                                <SlashMenuItem
-                                    label={item.label}
-                                    onSelect={() => item.onSelect()}
-                                />
-                            </li>
-                        ))}
-                    </ul>}
+                <ul part="menu" class="slash-menu">
+                    {this.state.items.map((item, index) => (
+                        <li part="item">
+                            <SlashMenuItem
+                                label={item.label}
+                                onSelect={() => item.onSelect()}
+                                selected={index === this.state.selectedIndex}
+                            />
+                        </li>
+                    ))}
+                </ul>
             </Fragment>
         );
     }

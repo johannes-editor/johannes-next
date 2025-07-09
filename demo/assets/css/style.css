@@ -21,3 +21,7 @@
 ::part(button) {
     width: 100%;
 }
+
+[part="button"].selected {
+    background-color: lightblue;
+}
