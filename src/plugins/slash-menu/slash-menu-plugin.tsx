@@ -28,9 +28,16 @@ export class SlashMenuPlugin extends Plugin {
 
         const extensionPlugins = plugins.filter(isSlashMenuPluginExtension);
 
-        root.append(
-            <SlashMenu extensionPlugins={extensionPlugins} />
-        );
+        document.addEventListener("keydown", (e) => this.handleKey(e, root, extensionPlugins))
+
+    }
+
+    private readonly handleKey = (e: KeyboardEvent, root: HTMLElement, extensionPlugins: (Plugin & SlashMenuPluginExtension)[]) => {
+        if (e.key === "/") {
+            root.append(
+                <SlashMenu extensionPlugins={extensionPlugins} />
+            );
+        }
     }
 }
 
