@@ -1,5 +1,9 @@
+/** @jsx h */
+import { h } from "../../jsx.ts";
 import { Plugin } from "../plugin.ts";
 import { SlashMenuPluginExtension, SLASH_MENU_PLUGIN_TYPE } from "../slash-menu/slash-menu-plugin.tsx";
+import { EmojiPickerOverlay } from "./components/emoji-picker-overlay.tsx";
+import { appendOnEditor } from "../../core/editor-manager/index.ts";
 
 /**
  * Example plugin that extends the SlashMenu.
@@ -9,6 +13,7 @@ import { SlashMenuPluginExtension, SLASH_MENU_PLUGIN_TYPE } from "../slash-menu/
  */
 export class EmojiPlugin extends Plugin implements SlashMenuPluginExtension {
 
+    range: Range | null = null;
     /**
      * Discriminator used by the system to identify this plugin as a SlashMenu extension.
      * Must be set to `SLASH_MENU_PLUGIN_TYPE`.
@@ -31,7 +36,26 @@ export class EmojiPlugin extends Plugin implements SlashMenuPluginExtension {
      * Inserts the emoji into the editor content.
      */
     onSelect(): void {
-        this.insert('😎');
+        // this.insert('😎');
+
+        // insertIntoBlockAtCaret('😎', this.range);
+
+        appendOnEditor(
+            <EmojiPickerOverlay range={this.range} />
+        )
+    }
+
+
+    onMounted(): void {
+
+        const selection = window.getSelection();
+        if (selection && selection.rangeCount > 0) {
+            this.range = selection.getRangeAt(0).cloneRange();
+        } else {
+            this.range = null;
+        }
+
+        console.log("montado. range: ", this.range);
     }
 
     override setup(_root: HTMLElement): void {

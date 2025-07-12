@@ -1,5 +1,7 @@
 /** @jsx h */
 import { h } from "../../jsx.ts";
+import { EventTypes } from "../../utils/event-types.ts";
+import { KeyboardKeys } from "../../utils/keyboard-keys.ts";
 import { Plugin } from "../plugin.ts";
 import { SlashMenu } from "./components/slash-menu.tsx";
 
@@ -7,6 +9,7 @@ import { SlashMenu } from "./components/slash-menu.tsx";
  * String literal used as a type discriminator for SlashMenu extension plugins.
  */
 export const SLASH_MENU_PLUGIN_TYPE = "slash-menu-plugin-extension" as const;
+
 
 /**
  * The SlashMenuPlugin is an EditorPlugin that integrates a SlashMenu into the editor interface.
@@ -28,22 +31,26 @@ export class SlashMenuPlugin extends Plugin {
 
         const extensionPlugins = plugins.filter(isSlashMenuPluginExtension);
 
-        document.addEventListener("keydown", (e) => this.handleKey(e, root, extensionPlugins))
-
+        document.addEventListener(EventTypes.KeyDown, (event) => this.handleKey(event, root, extensionPlugins))
     }
 
-    private readonly handleKey = (e: KeyboardEvent, root: HTMLElement, extensionPlugins: (Plugin & SlashMenuPluginExtension)[]) => {
-        if (e.key === "/") {
+    private readonly handleKey = (event: KeyboardEvent, root: HTMLElement, extensionPlugins: (Plugin & SlashMenuPluginExtension)[]) => {
+        if (event.key === KeyboardKeys.Slash && !this.mounted()) {
             root.append(
                 <SlashMenu extensionPlugins={extensionPlugins} />
             );
         }
     }
+
+    private mounted(): boolean {
+        return document.getElementsByTagName(SlashMenu.getTagName()).length > 0;
+    }
+
 }
 
 /**
  * Interface for plugins that can extend the SlashMenu.
- * Plugins implementing this interface will be shown as items in the menu.
+ * Plugins implementing this interface will be shown as items in the slash menu.
  */
 export interface SlashMenuPluginExtension {
     /** Discriminator for identifying plugins that implements SlashMenuPluginExtension */
@@ -52,6 +59,11 @@ export interface SlashMenuPluginExtension {
     label: string;
     /** The handler invoked when the menu item is selected */
     onSelect(): void;
+    /** 
+    * Callback invoked when the SlashMenu is mounted in the editor.
+    * Use this to perform any setup or side effects needed by the plugin when the menu appears.
+    */
+    onMounted(): void;
 }
 
 /**

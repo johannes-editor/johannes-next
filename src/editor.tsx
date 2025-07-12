@@ -1,7 +1,8 @@
 /** @jsx h */
 import { Fragment, h } from "./jsx.ts";
-import { setLocale, t } from "./i18n/index.ts";
-import { appendPlugins } from "./plugins/plugin-manager.ts"
+import { setLocale, t } from "./core/i18n/index.ts";
+import { initPlugins } from "./plugins/plugin-manager.ts"
+import { setRoot } from "./core/editor-manager/index.ts";
 
 /**
 * Initializes the text editor.
@@ -9,6 +10,7 @@ import { appendPlugins } from "./plugins/plugin-manager.ts"
 * @param root The root HTML element where the editor will be mounted.
 */
 export async function initEditor(root: HTMLElement) {
+    setRoot(root);
     // Set the language for the interface, defaulting to English if not specified.
     const lang = root.getAttribute("lang") || "en";
     await setLocale(lang);
@@ -17,12 +19,12 @@ export async function initEditor(root: HTMLElement) {
     root.replaceChildren(
         <Fragment>
             <div id="content" contenteditable="true">
-                <h1 data-placeholder={t("untitled")}></h1>
-                <p data-placeholder={t("startTyping")}></p>
+                <h1 class="block" data-placeholder={t("untitled")}></h1>
+                <p class="block" data-placeholder={t("startTyping")}></p>
             </div>
         </Fragment>
     );
 
     /** Append plugins to the editor */
-    appendPlugins(root);
+    initPlugins(root);
 }

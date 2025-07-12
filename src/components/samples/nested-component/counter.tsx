@@ -10,7 +10,7 @@ export interface CounterProps {
 export class Counter extends Component<CounterProps> {
     override state = { count: 1 };
 
-    static styles = `ba`;
+    // static styles = `ba`;
 
     private readonly handleKey = (e: KeyboardEvent) => {
         if (e.key === "Escape") {

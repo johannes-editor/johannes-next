@@ -11,15 +11,15 @@ interface CounterToggleState {
 
 export class CounterToggle extends Component<EmptyProps, CounterToggleState> {
 
-    styles = /*css*/ `
-        .counter-holder {
-            padding: 10px;
-            background: #eee;
-        }
-        button {
-            color: green;
-        }
-    `;
+    // styles = /*css*/ `
+    //     .counter-holder {
+    //         padding: 10px;
+    //         background: #eee;
+    //     }
+    //     button {
+    //         color: green;
+    //     }
+    // `;
 
     constructor() {
         super();

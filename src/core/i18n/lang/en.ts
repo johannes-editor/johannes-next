@@ -1,7 +1,7 @@
 import { TranslationSchema } from "../types.ts";
 
 const en: TranslationSchema = {
-  untitled: 'Untitledd',
+  untitled: 'Untitled',
   startTyping: 'Start typing...',
 };
 

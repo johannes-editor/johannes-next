@@ -2,7 +2,7 @@ import { Plugin } from "./plugin.ts";
 
 const manifestModules = import.meta.glob("./*/manifest.json");
 
-export async function appendPlugins(root: HTMLElement) {
+export async function initPlugins(root: HTMLElement) {
   const plugins = await fetchPlugins();
   for (const plugin of plugins) {
     try {
@@ -13,8 +13,6 @@ export async function appendPlugins(root: HTMLElement) {
       );
     }
   }
-
-  console.log("Plugins initialized!");
 }
 
 async function fetchPlugins(): Promise<Plugin[]> {

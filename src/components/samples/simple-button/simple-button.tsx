@@ -4,11 +4,11 @@ import { Component } from "../../component.ts";
 
 export class SimpleButton extends Component {
 
-    static styles = /*css*/ `
-        button {
-            background-color: yellow;
-        }
-    `;
+    // static styles = /*css*/ `
+    //     button {
+    //         background-color: yellow;
+    //     }
+    // `;
 
     text: string = "Just a button";
 

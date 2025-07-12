@@ -3,6 +3,10 @@ import { Fragment, h } from "../../../jsx.ts";
 import { SlashMenuItem } from "./slash-menu-item.tsx";
 import { SlashMenuPluginExtension } from "../slash-menu-plugin.tsx";
 import { Overlay } from "../../../components/base/overlay.ts";
+import { DomUtils } from "../../../utils/dom-utils.ts";
+import { SelectionUtils } from "../../../utils/selection-utils.ts";
+import { KeyboardKeys } from "../../../utils/keyboard-keys.ts";
+import { EventTypes } from "../../../utils/event-types.ts";
 
 
 interface SlashMenuProps {
@@ -22,7 +26,13 @@ export interface SlashMenuItemData {
 export class SlashMenu extends Overlay<SlashMenuProps, SlashMenuState> {
 
     contentElement: HTMLElement;
+    block: HTMLElement | null;
+    range: Range | null;
 
+
+    static override get tagName() {
+        return "slash-menu";
+    }
 
     constructor() {
         super();
@@ -32,13 +42,13 @@ export class SlashMenu extends Overlay<SlashMenuProps, SlashMenuState> {
                 {
                     label: "H1",
                     onSelect: () => {
-                        this.insert("<h1>H1</h1>");
+                        DomUtils.insertBlockAfter(this.block, "<h1>H1</h1>");
                     }
                 },
                 {
                     label: "Paragraph",
                     onSelect: () => {
-                        this.insert("<p>P</p>");
+                        DomUtils.insertBlockAfter(this.block, "<p>P</p>");
                     }
                 }
             ],
@@ -46,6 +56,8 @@ export class SlashMenu extends Overlay<SlashMenuProps, SlashMenuState> {
         };
 
         this.contentElement = document.getElementById("content")!;
+        this.block = DomUtils.findClosestAncestorOfSelectionByClass("block");
+        this.range = SelectionUtils.getCurrentSelectionRange();
     }
 
     override onMount(): void {
@@ -56,46 +68,54 @@ export class SlashMenu extends Overlay<SlashMenuProps, SlashMenuState> {
                 label: plugin.label,
                 onSelect: () => plugin.onSelect()
             });
+
+            plugin.onMounted();
         }
 
-        this.setState({ items: newItems });
+        this.on(document, EventTypes.KeyDown, this.handleKey as EventListener);
 
-        this.on(this.contentElement, "keydown", this.handleKey as EventListener);
+        this.setState({ items: newItems });
     }
 
-    private readonly handleKey = (e: KeyboardEvent) => {
+    private readonly handleKey = (event: KeyboardEvent) => {
 
+        switch (event.key) {
 
-        // if (!this.state.showSlashMenu) {
-        //     return;
-        // }
+            case KeyboardKeys.ArrowDown:
+                event.preventDefault();
+                this.setState({
+                    selectedIndex: (this.state.selectedIndex + 1) % this.state.items.length,
+                });
+                break;
 
-        // switch (e.key) {
-        //     // case "Escape":
-        //     //     this.setState({ showSlashMenu: false });
-        //     //     break;
-        //     case "ArrowDown":
-        //         e.preventDefault();
-        //         this.setState({
-        //             selectedIndex: (this.state.selectedIndex + 1) % this.state.items.length,
-        //         });
-        //         break;
-        //     case "ArrowUp":
-        //         e.preventDefault();
-        //         this.setState({
-        //             selectedIndex: (this.state.selectedIndex - 1 + this.state.items.length) % this.state.items.length,
-        //         });
-        //         break;
-        //     case "Enter":
-        //         e.preventDefault();
-        //         const item = this.state.items[this.state.selectedIndex];
-        //         if (item) {
-        //             item.onSelect();
-        //             this.setState({ showSlashMenu: false });
-        //         }
-        //         break;
-        // }
+            case KeyboardKeys.ArrowUp:
+                event.preventDefault();
+                this.setState({
+                    selectedIndex: (this.state.selectedIndex - 1 + this.state.items.length) % this.state.items.length,
+                });
+                break;
+
+            case KeyboardKeys.Enter:
+                event.preventDefault();
+                {
+                    const item = this.state.items[this.state.selectedIndex];
+                    if (item) {
+                        this.handleOnSelect(item);
+                    }
+                }
+                break;
+
+            case KeyboardKeys.Escape:
+            // No need to handle the Escape key here.
+            // All elements inheriting from Overlay already handle Escape key presses.
+            // The OverlayManager takes care of stacked overlays: pressing Escape will always close the topmost overlay first (LIFO order).
+        }
     };
+
+    handleOnSelect(item: SlashMenuItemData) {
+        item.onSelect();
+        this.remove(); // by default remove the SlashMenu after execute onSelect
+    }
 
     insert(content: string) {
         const contentNode = document.getElementById("content")!;
@@ -110,7 +130,7 @@ export class SlashMenu extends Overlay<SlashMenuProps, SlashMenuState> {
                         <li part="item">
                             <SlashMenuItem
                                 label={item.label}
-                                onSelect={() => item.onSelect()}
+                                onSelect={() => this.handleOnSelect(item)}
                                 selected={index === this.state.selectedIndex}
                             />
                         </li>
@@ -119,4 +139,6 @@ export class SlashMenu extends Overlay<SlashMenuProps, SlashMenuState> {
             </Fragment>
         );
     }
+
 }
+

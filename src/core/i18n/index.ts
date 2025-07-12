@@ -1,4 +1,4 @@
-import { I18n } from './I18n.ts';
+import { I18n } from './i18n.ts';
 import type { TranslationSchema } from './types.ts';
 
 const i18n = new I18n();
