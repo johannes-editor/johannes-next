@@ -1,9 +1,10 @@
+// deno-lint-ignore-file no-explicit-any
 import { Component } from "./components/component.ts";
 
 export function h(tag: any, props: Record<string, any> | null, ...children: any[]) {
     if (typeof tag === 'function') {
         if (tag.prototype instanceof Component) {
-            const tagName = tag.tagName ?? "x-" + toKebabCase(tag.name);
+            const tagName = tag.getTagName();
 
             if (!customElements.get(tagName)) {
                 customElements.define(tagName, tag);
@@ -40,10 +41,6 @@ export function h(tag: any, props: Record<string, any> | null, ...children: any[
     }
 
     return el;
-}
-
-function toKebabCase(str: string): string {
-    return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 }
 
 export function Fragment(props: { children?: any[] }) {

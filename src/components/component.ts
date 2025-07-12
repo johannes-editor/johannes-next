@@ -1,14 +1,14 @@
-interface ComponentConstructor {
-    styles?: string;
-    tagName?: string;
-}
+import { toKebabCase } from "../utils/utils.ts";
 
 // deno-lint-ignore no-explicit-any
 export abstract class Component<P = any, S = any> extends HTMLElement {
 
     props: P = {} as P;
     state: S = {} as S;
+
     element!: HTMLElement;
+
+    // shadow = this.attachShadow({ mode: 'open' });
 
     private listeners: Array<[EventTarget, string, EventListenerOrEventListenerObject, boolean?]> = [];
 
@@ -66,17 +66,15 @@ export abstract class Component<P = any, S = any> extends HTMLElement {
             );
         }
 
-        const ctor = this.constructor as ComponentConstructor;
-        const styles = ctor.styles;
-        if (styles && typeof styles === "string") {
-            const styleId = `component-style-${this.tagName.toLowerCase()}`;
-            if (!document.getElementById(styleId)) {
-                const styleEl = document.createElement("style");
-                styleEl.id = styleId;
-                styleEl.textContent = styles;
-                document.head.appendChild(styleEl);
-            }
-        }
+
+        // const ctor = this.constructor as ComponentConstructor;
+        // const styles = this.styles;
+        // if (styles && typeof styles === "string") {
+        //     const styleEl = document.createElement("style");
+        //     styleEl.textContent = styles;
+        //     this.shadow.appendChild(styleEl);
+        // }
+
     }
 
     private renderDOM() {
@@ -85,8 +83,22 @@ export abstract class Component<P = any, S = any> extends HTMLElement {
         this.appendChild(this.render());
     }
 
+    static get tagName(): string {
+        return `x-${toKebabCase(this.name)}`;
+    }
+
+    static getTagName(): string {
+        return this.tagName;
+    }
+
+    getTagName(): string {
+        return (this.constructor as typeof Component).tagName;
+    }
+
     abstract render(): HTMLElement;
 
     onMount?(): void;
     onUnmount?(): void;
+
+    static styles?: string;
 }
