@@ -1,8 +1,8 @@
 /** @jsx h */
 import { Fragment, h } from "./jsx.ts";
 import { setLocale, t } from "./core/i18n/index.ts";
-import { initPlugins } from "./plugins/plugin-manager.ts"
-import { setRoot } from "./core/editor-manager/index.ts";
+import { setRoot } from "./core/editor-engine/index.ts";
+import { init } from "./core/plugin-engine/index.ts";
 
 /**
 * Initializes the text editor.
@@ -26,5 +26,5 @@ export async function initEditor(root: HTMLElement) {
     );
 
     /** Append plugins to the editor */
-    initPlugins(root);
+    await init(root);
 }

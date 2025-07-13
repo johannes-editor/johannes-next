@@ -1,6 +1,6 @@
 /** @jsx h */
 import { Fragment, h } from "../../../jsx.ts";
-import { Overlay } from "../../../components/base/overlay.ts";
+import { OverlayComponent } from "../../../components/overlay-component.ts";
 import { EventTypes } from "../../../utils/event-types.ts";
 import { KeyboardKeys } from "../../../utils/keyboard-keys.ts";
 
@@ -13,7 +13,7 @@ interface EmojiPickerOverlayState {
     selectedIndex: number;
 }
 
-export class EmojiPickerOverlay extends Overlay<EmojiPickerOverlayProps, EmojiPickerOverlayState> {
+export class EmojiPickerOverlay extends OverlayComponent<EmojiPickerOverlayProps, EmojiPickerOverlayState> {
     range: Range | null;
 
     static override get tagName() {
@@ -101,8 +101,6 @@ export class EmojiPickerOverlay extends Overlay<EmojiPickerOverlayProps, EmojiPi
         );
     }
 }
-
-
 
 
 function insertIntoBlockAtCaret(content: string, range: Range | null) {

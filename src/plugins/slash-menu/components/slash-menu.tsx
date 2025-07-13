@@ -2,7 +2,7 @@
 import { Fragment, h } from "../../../jsx.ts";
 import { SlashMenuItem } from "./slash-menu-item.tsx";
 import { SlashMenuPluginExtension } from "../slash-menu-plugin.tsx";
-import { Overlay } from "../../../components/base/overlay.ts";
+import { OverlayComponent } from "../../../components/overlay-component.ts";
 import { DomUtils } from "../../../utils/dom-utils.ts";
 import { SelectionUtils } from "../../../utils/selection-utils.ts";
 import { KeyboardKeys } from "../../../utils/keyboard-keys.ts";
@@ -23,12 +23,11 @@ export interface SlashMenuItemData {
     onSelect: () => void;
 }
 
-export class SlashMenu extends Overlay<SlashMenuProps, SlashMenuState> {
+export class SlashMenuOverlay extends OverlayComponent<SlashMenuProps, SlashMenuState> {
 
     contentElement: HTMLElement;
     block: HTMLElement | null;
     range: Range | null;
-
 
     static override get tagName() {
         return "slash-menu";
@@ -114,7 +113,7 @@ export class SlashMenu extends Overlay<SlashMenuProps, SlashMenuState> {
 
     handleOnSelect(item: SlashMenuItemData) {
         item.onSelect();
-        this.remove(); // by default remove the SlashMenu after execute onSelect
+        this.remove(); // By default, remove the SlashMenu after executing onSelect
     }
 
     insert(content: string) {
@@ -125,9 +124,9 @@ export class SlashMenu extends Overlay<SlashMenuProps, SlashMenuState> {
     render() {
         return (
             <Fragment>
-                <ul part="menu" class="slash-menu">
+                <ul role="menu" part="menu" class="slash-menu">
                     {this.state.items.map((item, index) => (
-                        <li part="item">
+                        <li role="menuitem" part="item">
                             <SlashMenuItem
                                 label={item.label}
                                 onSelect={() => this.handleOnSelect(item)}
@@ -139,6 +138,5 @@ export class SlashMenu extends Overlay<SlashMenuProps, SlashMenuState> {
             </Fragment>
         );
     }
-
 }
 

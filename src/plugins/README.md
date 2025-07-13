@@ -11,8 +11,8 @@ metadata.
 - `version` – plugin version.
 - `active` – whether the plugin should be loaded when the editor starts.
 
-Additional fields are defined by plugin type. For example a Quick Menu plugin
-provides a `slashMenuItems` array describing items to insert via the quick
+Additional fields are defined by plugin type. For example a Slash Menu plugin
+provides a `slashMenuItems` array describing items to insert via the slash
 menu.
 
 ## Activation

@@ -1,8 +1,8 @@
-import { OverlayManager } from "../../core/overlay-manager.ts";
-import { Component } from "../component.ts";
+import { push, remove } from "../core/editor-engine/index.ts";
+import { Component } from "./component.ts";
 
 // deno-lint-ignore no-explicit-any
-export abstract class Overlay<P = any, S = any> extends Component<P, S> {
+export abstract class OverlayComponent<P = any, S = any> extends Component<P, S> {
 
     zIndex: number = 1000;
 
@@ -10,11 +10,11 @@ export abstract class Overlay<P = any, S = any> extends Component<P, S> {
         super.connectedCallback();
 
         this.style.zIndex = this.zIndex.toString();
-        OverlayManager.instance().push(this);
+        push(this);
     }
 
     override disconnectedCallback(): void {
         super.disconnectedCallback();
-        OverlayManager.instance().remove(this);
+        remove(this);
     }
 }

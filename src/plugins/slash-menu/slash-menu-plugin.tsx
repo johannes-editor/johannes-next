@@ -2,8 +2,8 @@
 import { h } from "../../jsx.ts";
 import { EventTypes } from "../../utils/event-types.ts";
 import { KeyboardKeys } from "../../utils/keyboard-keys.ts";
-import { Plugin } from "../plugin.ts";
-import { SlashMenu } from "./components/slash-menu.tsx";
+import { SlashMenuOverlay } from "./components/slash-menu.tsx";
+import { Plugin } from "../../core/plugin-engine/plugin.ts";
 
 /**
  * String literal used as a type discriminator for SlashMenu extension plugins.
@@ -37,13 +37,13 @@ export class SlashMenuPlugin extends Plugin {
     private readonly handleKey = (event: KeyboardEvent, root: HTMLElement, extensionPlugins: (Plugin & SlashMenuPluginExtension)[]) => {
         if (event.key === KeyboardKeys.Slash && !this.mounted()) {
             root.append(
-                <SlashMenu extensionPlugins={extensionPlugins} />
+                <SlashMenuOverlay extensionPlugins={extensionPlugins} />
             );
         }
     }
 
     private mounted(): boolean {
-        return document.getElementsByTagName(SlashMenu.getTagName()).length > 0;
+        return document.getElementsByTagName(SlashMenuOverlay.getTagName()).length > 0;
     }
 
 }

@@ -1,13 +1,11 @@
-import { EventTypes } from "../utils/event-types.ts";
-import { KeyboardKeys } from "../utils/keyboard-keys.ts";
+import { EventTypes } from "../../utils/event-types.ts";
+import { KeyboardKeys } from "../../utils/keyboard-keys.ts";
 
 export class OverlayManager {
 
     private stack: HTMLElement[] = [];
 
-    private static _instance: null | OverlayManager = null;
-
-    private constructor() {
+    constructor() {
         document.addEventListener(EventTypes.KeyDown, (event) => this.handleKey(event));
     }
 
@@ -29,14 +27,6 @@ export class OverlayManager {
             this.stack.splice(idx, 1);
             element.remove();
         }
-    }
-
-    static instance(): OverlayManager {
-        if (this._instance == null) {
-            this._instance = new OverlayManager();
-        }
-
-        return this._instance;
     }
 
     private readonly handleKey = (event: KeyboardEvent) => {
